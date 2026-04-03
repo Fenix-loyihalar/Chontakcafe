@@ -6,7 +6,7 @@ let orders = $state([
 		status: "in_progress",
 		items: [{ name: "Classic Burger", quantity: 2 }, { name: "Caesar Salad", quantity: 1 }],
 		createdAt: new Date(Date.now() - 8 * 60 * 1000),
-		totalPrice: 2598
+		totalPrice: 95000
 	},
 	{
 		id: "order-2",
@@ -14,11 +14,12 @@ let orders = $state([
 		status: "pending",
 		items: [{ name: "Margherita Pizza", quantity: 1 }, { name: "Chocolate Cake", quantity: 1 }],
 		createdAt: new Date(Date.now() - 2 * 60 * 1000),
-		totalPrice: 2198
+		totalPrice: 80000
 	}
 ]);
 
 // ====================== FUNKSIYALAR ======================
+/** @param {any} newOrder */
 export function addNewOrder(newOrder) {
 	orders.unshift({
 		...newOrder,
@@ -28,6 +29,10 @@ export function addNewOrder(newOrder) {
 	});
 }
 
+/** 
+ * @param {any} orderId 
+ * @param {any} newStatus 
+ */
 export function updateOrderStatus(orderId, newStatus) {
 	const order = orders.find(o => o.id === orderId);
 	if (!order) return;
@@ -43,6 +48,7 @@ export function updateOrderStatus(orderId, newStatus) {
 	}
 }
 
+/** @param {any} orderId */
 export function markAsServed(orderId) {
 	const index = orders.findIndex(o => o.id === orderId);
 	if (index > -1) orders.splice(index, 1);

@@ -1,0 +1,165 @@
+﻿Loading svelte-check in workspace: c:\Users\Omadbek\Chontakcafe
+Getting Svelte diagnostics...
+
+c:\Users\Omadbek\Chontakcafe\[32msrc\lib\api\client.js[39m:10:20
+[31mError[39m: Parameter 'orderData' implicitly has an 'any' type. 
+[36m
+	async createOrder([35morderData[36m) {
+		const res = await fetch(`${BASE_URL}/orders`, {[39m
+
+c:\Users\Omadbek\Chontakcafe\[32msrc\lib\stores\cart.js[39m:1:10
+[31mError[39m: Module '"svelte/reactivity"' has no exported member '$state'. 
+[36mimport { [35m$state[36m, $derived } from 'svelte/reactivity';[39m
+
+c:\Users\Omadbek\Chontakcafe\[32msrc\lib\stores\cart.js[39m:1:18
+[31mError[39m: Module '"svelte/reactivity"' has no exported member '$derived'. 
+[36mimport { $state, [35m$derived[36m } from 'svelte/reactivity';[39m
+
+c:\Users\Omadbek\Chontakcafe\[32msrc\lib\stores\cart.js[39m:5:27
+[31mError[39m: Parameter 'item' implicitly has an 'any' type. 
+[36m
+export function addToCart([35mitem[36m) {
+	const existing = cart.items.find(i => i.id === item.id);[39m
+
+c:\Users\Omadbek\Chontakcafe\[32msrc\lib\stores\cart.js[39m:6:35
+[31mError[39m: Parameter 'i' implicitly has an 'any' type. 
+[36mexport function addToCart(item) {
+	const existing = cart.items.find([35mi[36m => i.id === item.id);
+	if (existing) {[39m
+
+c:\Users\Omadbek\Chontakcafe\[32msrc\lib\stores\cart.js[39m:14:32
+[31mError[39m: Parameter 'id' implicitly has an 'any' type. 
+[36m
+export function removeFromCart([35mid[36m) {
+	cart.items = cart.items.filter(i => i.id !== id);[39m
+
+c:\Users\Omadbek\Chontakcafe\[32msrc\lib\stores\cart.js[39m:15:33
+[31mError[39m: Parameter 'i' implicitly has an 'any' type. 
+[36mexport function removeFromCart(id) {
+	cart.items = cart.items.filter([35mi[36m => i.id !== id);
+}[39m
+
+c:\Users\Omadbek\Chontakcafe\[32msrc\lib\stores\cart.js[39m:18:32
+[31mError[39m: Parameter 'id' implicitly has an 'any' type. 
+[36m
+export function updateQuantity([35mid[36m, quantity) {
+	const item = cart.items.find(i => i.id === id);[39m
+
+c:\Users\Omadbek\Chontakcafe\[32msrc\lib\stores\cart.js[39m:18:36
+[31mError[39m: Parameter 'quantity' implicitly has an 'any' type. 
+[36m
+export function updateQuantity(id, [35mquantity[36m) {
+	const item = cart.items.find(i => i.id === id);[39m
+
+c:\Users\Omadbek\Chontakcafe\[32msrc\lib\stores\cart.js[39m:19:31
+[31mError[39m: Parameter 'i' implicitly has an 'any' type. 
+[36mexport function updateQuantity(id, quantity) {
+	const item = cart.items.find([35mi[36m => i.id === id);
+	if (item) item.quantity = Math.max(1, quantity);[39m
+
+c:\Users\Omadbek\Chontakcafe\[32msrc\lib\stores\cart.js[39m:24:21
+[31mError[39m: Parameter 'sum' implicitly has an 'any' type. 
+[36mexport const totalPrice = $derived(
+	cart.items.reduce(([35msum[36m, item) => sum + item.price * item.quantity, 0)
+);[39m
+
+c:\Users\Omadbek\Chontakcafe\[32msrc\lib\stores\cart.js[39m:24:26
+[31mError[39m: Parameter 'item' implicitly has an 'any' type. 
+[36mexport const totalPrice = $derived(
+	cart.items.reduce((sum, [35mitem[36m) => sum + item.price * item.quantity, 0)
+);[39m
+
+c:\Users\Omadbek\Chontakcafe\[32msrc\lib\stores\cart.js[39m:28:21
+[31mError[39m: Parameter 'sum' implicitly has an 'any' type. 
+[36mexport const totalItems = $derived(
+	cart.items.reduce(([35msum[36m, item) => sum + item.quantity, 0)
+);[39m
+
+c:\Users\Omadbek\Chontakcafe\[32msrc\lib\stores\cart.js[39m:28:26
+[31mError[39m: Parameter 'item' implicitly has an 'any' type. 
+[36mexport const totalItems = $derived(
+	cart.items.reduce((sum, [35mitem[36m) => sum + item.quantity, 0)
+);[39m
+
+c:\Users\Omadbek\Chontakcafe\[32msrc\lib\stores\order.svelte.js[39m:22:29
+[31mError[39m: Parameter 'newOrder' implicitly has an 'any' type. 
+[36m// ====================== FUNKSIYALAR ======================
+export function addNewOrder([35mnewOrder[36m) {
+	orders.unshift({[39m
+
+c:\Users\Omadbek\Chontakcafe\[32msrc\lib\stores\order.svelte.js[39m:31:35
+[31mError[39m: Parameter 'orderId' implicitly has an 'any' type. 
+[36m
+export function updateOrderStatus([35morderId[36m, newStatus) {
+	const order = orders.find(o => o.id === orderId);[39m
+
+c:\Users\Omadbek\Chontakcafe\[32msrc\lib\stores\order.svelte.js[39m:31:44
+[31mError[39m: Parameter 'newStatus' implicitly has an 'any' type. 
+[36m
+export function updateOrderStatus(orderId, [35mnewStatus[36m) {
+	const order = orders.find(o => o.id === orderId);[39m
+
+c:\Users\Omadbek\Chontakcafe\[32msrc\lib\stores\order.svelte.js[39m:46:30
+[31mError[39m: Parameter 'orderId' implicitly has an 'any' type. 
+[36m
+export function markAsServed([35morderId[36m) {
+	const index = orders.findIndex(o => o.id === orderId);[39m
+
+c:\Users\Omadbek\Chontakcafe\[32msrc\lib\components\cart\ChefOrderItem.svelte[39m:15:56
+[33mWarn[39m: This reference only captures the initial value of `createdAt`. Did you mean to reference it inside a derived instead?
+https://svelte.dev/e/state_referenced_locally (svelte)
+[36m  // Vaqtni hisoblash
+  let minutesElapsed = $state(Math.floor((new Date() - [35mcreatedAt[36m) / 60000));[39m
+
+c:\Users\Omadbek\Chontakcafe\[32msrc\lib\components\cart\ChefOrderItem.svelte[39m:15:43
+[31mError[39m: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type. (js)
+[36m  // Vaqtni hisoblash
+  let minutesElapsed = $state(Math.floor(([35mnew Date()[36m - createdAt) / 60000));[39m
+
+c:\Users\Omadbek\Chontakcafe\[32msrc\lib\components\cart\ChefOrderItem.svelte[39m:19:34
+[31mError[39m: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type. (js)
+[36m  const interval = setInterval(() => {
+    minutesElapsed = Math.floor(([35mnew Date()[36m - createdAt) / 60000);
+  }, 60000);[39m
+
+c:\Users\Omadbek\Chontakcafe\[32msrc\lib\components\cart\WaiterOrderCard.svelte[39m:36:24
+[31mError[39m: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type. (ts)
+[36m  function getMinutesAgo(date: number) {
+    return Math.floor(([35mnew Date()[36m - date) / 60000);
+  }[39m
+
+c:\Users\Omadbek\Chontakcafe\[32msrc\lib\components\layout\Footer.svelte[39m:21:9
+[33mWarn[39m: '#' is not a valid href attribute
+https://svelte.dev/e/a11y_invalid_attribute (svelte)
+[36m					<a href="/cart" class="hover:text-white">Savat</a>
+					<a [35mhref="#"[36m class="hover:text-white">Buyurtmalar tarixi</a>
+				</div>[39m
+
+c:\Users\Omadbek\Chontakcafe\[32msrc\routes\girgitton\+page.svelte[39m:85:54
+[31mError[39m: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type '{ all: number; pending: number; in_progress: number; ready: number; }'.
+  No index signature with a parameter of type 'string' was found on type '{ all: number; pending: number; in_progress: number; ready: number; }'. (js)
+[36m        >
+          {filter.replace('_', ' ').toUpperCase()} ({[35mstats[filter][36m})
+        </button>[39m
+
+c:\Users\Omadbek\Chontakcafe\[32msrc\routes\order\+page.svelte[39m:10:30
+[31mError[39m: Parameter 'orderId' implicitly has an 'any' type. (js)
+[36m
+	function handleStatusChange([35morderId[36m, newStatus) {
+		updateOrderStatus(orderId, newStatus);[39m
+
+c:\Users\Omadbek\Chontakcafe\[32msrc\routes\order\+page.svelte[39m:10:39
+[31mError[39m: Parameter 'newStatus' implicitly has an 'any' type. (js)
+[36m
+	function handleStatusChange(orderId, [35mnewStatus[36m) {
+		updateOrderStatus(orderId, newStatus);[39m
+
+c:\Users\Omadbek\Chontakcafe\[32msrc\routes\order\+page.svelte[39m:51:27
+[31mError[39m: Expected 1-2 arguments, but got 3. (js)
+[36m      {#each activeOrders as order (order.id)}
+        <div animate:slide[35m={{ duration: 300 }[36m} out:fade={{ duration: 200 }}>
+          <ChefOrderItem[39m
+
+====================================
+[31msvelte-check found 25 errors and 2 warnings in 8 files
+[39m

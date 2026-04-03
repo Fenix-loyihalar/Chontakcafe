@@ -4,6 +4,7 @@
 	import Badge from "$lib/components/cart/Badge.svelte";
 	import ThemeToggle from "$lib/components/ThemeToggle.svelte";
 	import { fade } from "svelte/transition";
+	import { lang, t } from "$lib/i18n.js";
 
 	let { restaurantName = "Café Delight" } = $props();
 
@@ -31,10 +32,19 @@
 						variant="outline" 
 						class="font-mono px-4 py-1.5 border-primary/20 bg-primary/5 shadow-sm"
 					>
-						{tableNumber}-STOL
+						{tableNumber}-{$t('header.table')}
 					</Badge>
 				</div>
 			{/if}
+
+			<select 
+				bind:value={$lang} 
+				class="bg-background text-foreground border border-border rounded-lg px-2 py-1 focus:ring-1 focus:ring-primary focus:outline-none"
+			>
+				<option value="uz">UZ</option>
+				<option value="ru">RU</option>
+				<option value="en">EN</option>
+			</select>
 
 			<ThemeToggle />
 		</div>

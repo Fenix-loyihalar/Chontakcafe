@@ -10,7 +10,7 @@
       tableNumber: 5,
       status: "ready",
       items: [{ name: "Classic Burger", quantity: 2 }, { name: "Iced Latte", quantity: 1 }],
-      totalPrice: 3097,
+      totalPrice: 90000,
       createdAt: new Date(Date.now() - 15 * 60 * 1000),
     },
     {
@@ -18,7 +18,7 @@
       tableNumber: 3,
       status: "in_progress",
       items: [{ name: "Caesar Salad", quantity: 1 }, { name: "Fresh Orange Juice", quantity: 2 }],
-      totalPrice: 1697,
+      totalPrice: 55000,
       createdAt: new Date(Date.now() - 8 * 60 * 1000),
     },
     {
@@ -26,7 +26,7 @@
       tableNumber: 8,
       status: "pending",
       items: [{ name: "Margherita Pizza", quantity: 1 }, { name: "Chocolate Cake", quantity: 2 }],
-      totalPrice: 2897,
+      totalPrice: 105000,
       createdAt: new Date(Date.now() - 2 * 60 * 1000),
     }
   ]);
@@ -82,7 +82,7 @@
             ? 'bg-background text-primary shadow-sm' 
             : 'text-muted-foreground hover:text-foreground'}"
         >
-          {filter.replace('_', ' ').toUpperCase()} ({stats[filter]})
+          {filter.replace('_', ' ').toUpperCase()} ({/** @type {Record<string, number>} */ (stats)[filter]})
         </button>
       {/each}
     </div>

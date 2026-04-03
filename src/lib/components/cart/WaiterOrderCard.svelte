@@ -2,6 +2,7 @@
   import Card from "$lib/components/cart/Card.svelte";
   import Badge from "$lib/components/cart/Badge.svelte";
   import { Clock, CupSodaIcon } from "lucide-svelte";
+  import { t } from "$lib/i18n.js";
 
   let { 
     order, 
@@ -33,7 +34,7 @@
 	 * @param {number} date
 	 */
   function getMinutesAgo(date: number) {
-    return Math.floor((new Date() - date) / 60000);
+    return Math.floor((new Date().getTime() - new Date(date).getTime()) / 60000);
   }
 </script>
 
@@ -62,7 +63,7 @@
 
     <div class="flex justify-between items-center mb-4">
       <span class="text-xs text-muted-foreground uppercase tracking-widest font-semibold">Umumiy</span>
-      <span class="text-lg font-black">${(order.totalPrice / 100).toFixed(2)}</span>
+      <span class="text-lg font-black">{order.totalPrice.toLocaleString()} {$t('cart.currency')}</span>
     </div>
 
     <div class="grid grid-cols-2 gap-2">

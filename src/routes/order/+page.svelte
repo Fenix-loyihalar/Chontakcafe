@@ -7,6 +7,10 @@
 
   let activeOrders = $derived(orders.filter(o => o.status !== "ready"));
 
+	/** 
+	 * @param {any} orderId 
+	 * @param {any} newStatus 
+	 */
 	function handleStatusChange(orderId, newStatus) {
 		updateOrderStatus(orderId, newStatus);
 	}
@@ -48,7 +52,7 @@
   {:else}
     <div class="space-y-6">
       {#each activeOrders as order (order.id)}
-        <div animate:slide={{ duration: 300 }} out:fade={{ duration: 200 }}>
+        <div in:slide={{ duration: 300 }} out:fade={{ duration: 200 }}>
           <ChefOrderItem
             {...order}
             orderId={order.id}
