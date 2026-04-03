@@ -18,6 +18,7 @@
 				<div class="flex flex-col gap-2 text-sm">
 					<a href="/menu" class="hover:text-white">Menu</a>
 					<a href="/cart" class="hover:text-white">Savat</a>
+					<!-- svelte-ignore a11y_invalid_attribute -->
 					<a href="#" class="hover:text-white">Buyurtmalar tarixi</a>
 				</div>
 			</div>

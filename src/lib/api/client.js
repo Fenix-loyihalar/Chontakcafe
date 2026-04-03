@@ -7,6 +7,7 @@ export const api = {
 		return res.json();
 	},
 
+	/** @param {any} orderData */
 	async createOrder(orderData) {
 		const res = await fetch(`${BASE_URL}/orders`, {
 			method: 'POST',

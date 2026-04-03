@@ -1,17 +1,18 @@
 <script>
 	import { X, Send, Bot, Utensils } from 'lucide-svelte';
 	import { fade, slide } from 'svelte/transition';
+	import { t } from "$lib/i18n.js";
 
 	let { isOpen = $bindable(false), menuItems = [], onAddCombo } = $props();
 
 	let inputText = $state('');
 	/**
-	 * @type {{ role: 'user' | 'assistant', text: string, combo?: any[], total?: number }[]}
+	 * @type {{ role: 'user' | 'assistant', text?: string, textKey?: string, budget?: number, combo?: any[], total?: number }[]}
 	 */
 	let messages = $state([
 		{
 			role: 'assistant',
-			text: "Hi! I'm your AI foodie assistant. Tell me your budget and I'll find the perfect combo for you!"
+			textKey: 'ai.greeting'
 		}
 	]);
 
@@ -49,14 +50,16 @@
 				if (combo.length > 0) {
 					messages.push({
 						role: 'assistant',
-						text: `Here's a great combo for ${budget} so'm! (Total: ${total} so'm)`,
+						textKey: 'ai_success',
+						budget,
 						combo,
 						total
 					});
 				} else {
 					messages.push({
 						role: 'assistant',
-						text: `Sorry, I couldn't find anything for ${budget} so'm. Our cheapest item might be more expensive.`
+						textKey: 'ai.error_budget',
+						budget
 					});
 				}
 			}, 600);
@@ -64,7 +67,7 @@
 			setTimeout(() => {
 				messages.push({
 					role: 'assistant',
-					text: "I didn't catch a budget there. Please include a number, like 'I have 2000'."
+					textKey: 'ai.no_budget'
 				});
 			}, 600);
 		}
@@ -82,7 +85,7 @@
 		onAddCombo(combo);
 		messages.push({
 			role: 'assistant',
-			text: 'Awesome! I added those to your cart.'
+			textKey: 'ai.added'
 		});
 	}
 </script>
@@ -98,7 +101,7 @@
 		<div class="bg-primary text-primary-foreground p-4 flex items-center justify-between">
 			<div class="flex items-center gap-2">
 				<Bot class="w-6 h-6" />
-				<h3 class="font-bold text-lg">AI Assistant</h3>
+				<h3 class="font-bold text-lg">{$t('ai.title')}</h3>
 			</div>
 			<button
 				onclick={() => (isOpen = false)}
@@ -118,13 +121,23 @@
 							? 'bg-primary text-primary-foreground rounded-tr-sm'
 							: 'bg-muted text-foreground border border-border border-l-4 border-l-primary rounded-tl-sm'}"
 					>
-						<p class="text-sm">{msg.text}</p>
+						<p class="text-sm">
+							{#if msg.textKey === 'ai_success'}
+								{$t('ai.success_budget1')} {(msg.budget || 0).toLocaleString()} {$t('ai.success_budget2')} {(msg.total || 0).toLocaleString()} {$t('cart.currency')})
+							{:else if msg.textKey === 'ai.error_budget'}
+								{msg.budget} {$t('ai.error_budget')}
+							{:else if msg.textKey}
+								{$t(msg.textKey)}
+							{:else}
+								{msg.text}
+							{/if}
+						</p>
 					</div>
 
 					{#if msg.combo && msg.combo.length > 0}
 						<div class="mt-2 w-[90%] bg-card border border-border rounded-xl p-3 shadow-sm self-start">
 							<h4 class="text-xs font-semibold uppercase text-muted-foreground mb-2">
-								Suggested Combo
+								{$t('ai.suggested_combo')}
 							</h4>
 							<div class="space-y-2 mb-3">
 								{#each msg.combo as item}
@@ -133,19 +146,19 @@
 											<Utensils class="w-3 h-3 text-primary" />
 											<span class="truncate max-w-[120px]">{item.name}</span>
 										</div>
-										<span class="font-medium">{item.price} sum</span>
+										<span class="font-medium">{item.price.toLocaleString()} {$t('cart.currency')}</span>
 									</div>
 								{/each}
 							</div>
 							<div class="pt-2 border-t border-border flex justify-between items-center mb-3">
-								<span class="text-sm font-semibold">Total</span>
-								<span class="text-sm font-bold text-primary">{msg.total} sum</span>
+								<span class="text-sm font-semibold">{$t('ai.total')}</span>
+								<span class="text-sm font-bold text-primary">{(msg.total || 0).toLocaleString()} {$t('cart.currency')}</span>
 							</div>
 							<button
 								onclick={() => addComboToCart(msg.combo || [])}
 								class="w-full bg-primary/10 hover:bg-primary/20 text-primary font-semibold py-2 rounded-lg text-sm transition-colors"
 							>
-								Add all to Cart
+								{$t('ai.add_all')}
 							</button>
 						</div>
 					{/if}
@@ -159,7 +172,7 @@
 				type="text"
 				bind:value={inputText}
 				onkeydown={handleKeyDown}
-				placeholder="E.g. I have 2500 so'm..."
+				placeholder="{$t('ai.placeholder')}"
 				class="flex-1 bg-muted rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
 			/>
 			<button

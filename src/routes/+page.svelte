@@ -1,16 +1,17 @@
 <script>
   import Card from '$lib/components/cart/Card.svelte';
   import { UtensilsCrossed, User, ChefHat } from 'lucide-svelte';
+  import { t } from "$lib/i18n.js";
 </script>
 
 <div class="min-h-screen bg-background text-foreground transition-colors duration-300">
   <main class="container max-w-5xl mx-auto px-4 py-12">
     <div class="text-center mb-12">
       <h2 class="text-4xl md:text-5xl font-extrabold mb-4 tracking-tight">
-        Raqamli buyurtma tizimi
+        {$t('main.title')}
       </h2>
       <p class="text-lg text-muted-foreground">
-        Davom etish uchun rolingizni tanlang!
+        {$t('main.subtitle')}
       </p>
     </div>
 
@@ -25,9 +26,9 @@
             <User class="h-8 w-8 text-primary" />
           </div>
           <div>
-            <h3 class="text-xl font-semibold mb-2">Mijoz</h3>
+            <h3 class="text-xl font-semibold mb-2">{$t('main.customer')}</h3>
             <p class="text-sm text-muted-foreground">
-              Menyuni ko'rish va buyurtma qilish
+              {$t('main.customer_desc')}
             </p>
           </div>
         </Card>
@@ -42,9 +43,9 @@
             <UtensilsCrossed class="h-8 w-8 text-orange-500" />
           </div>
           <div>
-            <h3 class="text-xl font-semibold mb-2">Girgitton</h3>
+            <h3 class="text-xl font-semibold mb-2">{$t('main.waiter')}</h3>
             <p class="text-sm text-muted-foreground">
-              Buyurtmalarni olib borish
+              {$t('main.waiter_desc')}
             </p>
           </div>
         </Card>
@@ -59,9 +60,9 @@
             <ChefHat class="h-8 w-8 text-red-500" />
           </div>
           <div>
-            <h3 class="text-xl font-semibold mb-2">Oshpaz</h3>
+            <h3 class="text-xl font-semibold mb-2">{$t('main.chef')}</h3>
             <p class="text-sm text-muted-foreground">
-              Buyurtmalarni ko'rish va tayyorlash
+              {$t('main.chef_desc')}
             </p>
           </div>
         </Card>

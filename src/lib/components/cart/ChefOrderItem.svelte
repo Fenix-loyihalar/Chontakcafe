@@ -12,11 +12,12 @@
   } = $props();
 
   // Vaqtni hisoblash
-  let minutesElapsed = $state(Math.floor((new Date() - createdAt) / 60000));
+  // svelte-ignore state_referenced_locally
+  let minutesElapsed = $state(Math.floor((new Date().getTime() - new Date(createdAt).getTime()) / 60000));
   
   // Har daqiqada vaqtni yangilab turish
   const interval = setInterval(() => {
-    minutesElapsed = Math.floor((new Date() - createdAt) / 60000);
+    minutesElapsed = Math.floor((new Date().getTime() - new Date(createdAt).getTime()) / 60000);
   }, 60000);
 
   // Komponent yo'qolganda intervalni tozalash
