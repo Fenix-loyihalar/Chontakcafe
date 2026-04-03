@@ -4,7 +4,7 @@ let orders = $state([
 		id: "order-1",
 		tableNumber: 5,
 		status: "in_progress",
-		items: [{ name: "Classic Burger", quantity: 2 }, { name: "Caesar Salad", quantity: 1 }],
+		items: [{ itemId: "1", quantity: 2 }, { itemId: "2", quantity: 1 }],
 		createdAt: new Date(Date.now() - 8 * 60 * 1000),
 		totalPrice: 95000
 	},
@@ -12,7 +12,7 @@ let orders = $state([
 		id: "order-2",
 		tableNumber: 3,
 		status: "pending",
-		items: [{ name: "Margherita Pizza", quantity: 1 }, { name: "Chocolate Cake", quantity: 1 }],
+		items: [{ itemId: "3", quantity: 1 }, { itemId: "6", quantity: 1 }],
 		createdAt: new Date(Date.now() - 2 * 60 * 1000),
 		totalPrice: 80000
 	}

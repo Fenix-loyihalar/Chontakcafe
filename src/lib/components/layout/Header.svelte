@@ -1,5 +1,5 @@
 <script>
-	import { UtensilsCrossed } from "lucide-svelte";
+	import { UtensilsCrossed, Globe, ChevronDown } from "lucide-svelte";
 	import { page } from '$app/stores'; // URL-ni kuzatish uchun
 	import Badge from "$lib/components/cart/Badge.svelte";
 	import ThemeToggle from "$lib/components/ThemeToggle.svelte";
@@ -7,6 +7,8 @@
 	import { lang, t } from "$lib/i18n.js";
 
 	let { restaurantName = "Café Delight" } = $props();
+
+	let isLangOpen = $state(false);
 
 	// Svelte 5 derived rune orqali table raqamini olish
 	// URL: /menu?table=5 bo'lsa, 5 ni qaytaradi
@@ -37,14 +39,33 @@
 				</div>
 			{/if}
 
-			<select 
-				bind:value={$lang} 
-				class="bg-background text-foreground border border-border rounded-lg px-2 py-1 focus:ring-1 focus:ring-primary focus:outline-none"
-			>
-				<option value="uz">UZ</option>
-				<option value="ru">RU</option>
-				<option value="en">EN</option>
-			</select>
+			<div class="relative">
+				<button 
+					onclick={() => isLangOpen = !isLangOpen}
+					class="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-border bg-background/50 hover:bg-accent transition-colors text-sm font-semibold uppercase tracking-wider"
+				>
+					<Globe class="w-4 h-4 text-muted-foreground" />
+					{$lang}
+					<ChevronDown class="w-3 h-3 transition-transform {isLangOpen ? 'rotate-180' : ''}" />
+				</button>
+
+				{#if isLangOpen}
+					<div 
+						class="absolute right-0 mt-2 w-32 rounded-2xl border border-border bg-background/80 backdrop-blur-xl shadow-2xl p-1 z-50 overflow-hidden"
+						in:fade={{ duration: 150 }}
+						out:fade={{ duration: 100 }}
+					>
+						{#each ['uz', 'ru', 'en'] as l}
+							<button 
+								onclick={() => { $lang = l; isLangOpen = false; }}
+								class="w-full text-left px-4 py-2 rounded-xl text-sm font-medium transition-all {$lang === l ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/20' : 'hover:bg-accent'}"
+							>
+								{l.toUpperCase()}
+							</button>
+						{/each}
+					</div>
+				{/if}
+			</div>
 
 			<ThemeToggle />
 		</div>

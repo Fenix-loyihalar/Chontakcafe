@@ -2,6 +2,7 @@
   import { ClipboardList, Filter } from "lucide-svelte";
   import WaiterOrderCard from "$lib/components/cart/WaiterOrderCard.svelte";
   import { fade, fly } from "svelte/transition";
+  import { t } from "$lib/i18n.js";
 
   // Mock data (Real loyihada buni API dan olasiz)
   let orders = $state([
@@ -68,9 +69,9 @@
     <div>
       <div class="flex items-center gap-2 text-primary mb-2">
         <ClipboardList class="h-5 w-5" />
-        <span class="font-bold uppercase tracking-widest text-xs">Live Kitchen Feed</span>
+        <span class="font-bold uppercase tracking-widest text-xs">{$t("chef.live_feed")}</span>
       </div>
-      <h2 class="text-4xl font-black tracking-tighter">Buyurtmalar paneli</h2>
+      <h2 class="text-4xl font-black tracking-tighter">{$t("chef.title")}</h2>
     </div>
 
     <div class="flex flex-wrap gap-2 p-1.5 bg-muted rounded-xl border border-border/50">
@@ -82,7 +83,7 @@
             ? 'bg-background text-primary shadow-sm' 
             : 'text-muted-foreground hover:text-foreground'}"
         >
-          {filter.replace('_', ' ').toUpperCase()} ({/** @type {Record<string, number>} */ (stats)[filter]})
+          {$t('status.' + filter).toUpperCase()} ({/** @type {Record<string, number>} */ (stats)[filter]})
         </button>
       {/each}
     </div>
@@ -105,8 +106,8 @@
       <div class="bg-muted p-4 rounded-full mb-4">
         <Filter class="h-8 w-8 text-muted-foreground" />
       </div>
-      <p class="text-xl font-medium">No orders found in this category</p>
-      <p class="text-sm text-muted-foreground">Everything is currently up to date.</p>
+      <p class="text-xl font-medium">{$t("chef.no_orders")}</p>
+      <p class="text-sm text-muted-foreground">{$t("chef.empty_desc")}</p>
     </div>
   {/if}
 </main>
