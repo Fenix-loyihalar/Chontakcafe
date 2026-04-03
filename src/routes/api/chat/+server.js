@@ -1,8 +1,8 @@
 import { json } from '@sveltejs/kit';
 import { GoogleGenerativeAI } from '@google/generative-ai';
+import { AI } from "$env/static/private";
 
 // New API key provided by the user
-const API_KEY = "AIzaSyDKn-H5lSlkxNYGeMHeiqMtR0z7I5TFQNw";
 
 export async function POST({ request }) {
     const body = await request.json();
@@ -10,7 +10,7 @@ export async function POST({ request }) {
 
     try {
         // Using gemini-2.5-flash as verified for this specific key
-        const genAI = new GoogleGenerativeAI(API_KEY);
+        const genAI = new GoogleGenerativeAI(AI);
         const model = genAI.getGenerativeModel({
             model: "gemini-2.5-flash",
             generationConfig: {

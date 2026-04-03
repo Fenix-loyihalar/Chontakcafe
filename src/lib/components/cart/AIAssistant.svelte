@@ -162,7 +162,7 @@
             >
                 <div class="flex items-center gap-4">
                     <div
-                        class="rounded-2xl bg-gradient-to-tr from-primary to-indigo-500 p-3 text-white shadow-lg shadow-primary/30"
+                        class="rounded-2xl bg-linear-to-tr from-primary to-indigo-500 p-3 text-white shadow-lg shadow-primary/30"
                     >
                         <Sparkles class="h-6 w-6" />
                     </div>
@@ -191,11 +191,11 @@
             >
                 {#if messages.length === 0}
                     <div class="mx-auto max-w-xl text-center" in:fade={{ delay: 200 }}>
-                        <div
+                        <!-- <div
                             class="mx-auto mb-8 flex h-24 w-24 rotate-3 items-center justify-center rounded-[2rem] border border-white/20 bg-white/50 shadow-2xl backdrop-blur-md transition-all duration-500 hover:rotate-0 dark:bg-white/5"
                         >
                             <UtensilsCrossed class="h-12 w-12 text-primary" />
-                        </div>
+                        </div> -->
                         <h1
                             class="mb-4 text-4xl leading-tight font-extrabold tracking-tight text-zinc-900 sm:text-5xl dark:text-white"
                         >
