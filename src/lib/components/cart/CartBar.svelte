@@ -1,6 +1,7 @@
 <script>
   import { ShoppingBag } from 'lucide-svelte';
   import { fly } from 'svelte/transition';
+  import { t } from "$lib/i18n.js";
 
   const { itemCount = 0, totalPrice = 0, onPlaceOrder } = $props()
 </script>
@@ -21,8 +22,8 @@
             </span>
           </div>
           <div>
-            <p class="text-sm opacity-90 font-medium">Umumiy hosib</p>
-            <p class="text-xl font-bold">{(totalPrice / 100).toFixed(2)} ming so'm</p>
+            <p class="text-sm opacity-90 font-medium">{$t('cart.total')}</p>
+            <p class="text-xl font-bold">{totalPrice.toLocaleString()} {$t('cart.currency')}</p>
           </div>
         </div>
 
@@ -30,7 +31,7 @@
           onclick={onPlaceOrder}
           class="bg-background text-foreground hover:bg-muted font-bold px-6 py-3 rounded-xl transition-colors focus:outline-none focus:ring-2 focus:ring-background focus:ring-offset-2 focus:ring-offset-primary"
         >
-          Buyurtma qilish
+          {$t('cart.place_order')}
         </button>
         
       </div>

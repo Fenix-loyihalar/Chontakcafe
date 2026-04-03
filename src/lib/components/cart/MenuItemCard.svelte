@@ -1,6 +1,7 @@
 <script>
 	import Card from '$lib/components/cart/Card.svelte';
 	import { Plus } from 'lucide-svelte';
+	import { t } from "$lib/i18n.js";
 
 	const { id, name, description, price, image, onAdd } = $props();
 </script>
@@ -21,10 +22,8 @@
 			<h3 class="text-lg leading-tight font-bold">{name}</h3>
 
 			<span class="flex flex-col items-end">
-				<span class="font-semibold text-primary">
-					{(price / 100).toFixed(2)}
-				</span>
-				<span class="text-xs text-muted-foreground font-semibold -mt-1.5"> ming so'm </span>
+					{price.toLocaleString()}
+				<span class="text-xs text-muted-foreground font-semibold -mt-1.5"> {$t('cart.currency')} </span>
 			</span>
 		</div>
 
@@ -37,7 +36,7 @@
 			class="mt-auto inline-flex h-10 w-full items-center justify-center gap-2 rounded-md bg-secondary px-4 py-2 font-medium text-secondary-foreground transition-colors hover:bg-secondary/80 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
 		>
 			<Plus class="h-4 w-4" />
-			Ro'yxatga kiritish
+			{$t('cart.add_to_cart')}
 		</button>
 	</div>
 </Card>

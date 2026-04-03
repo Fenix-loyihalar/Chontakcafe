@@ -6,69 +6,76 @@
 	import { fade } from 'svelte/transition';
 	import { page } from '$app/state';
 	import { addNewOrder } from '$lib/stores/order.svelte'; // ← yangi import
+	import { t, lang } from "$lib/i18n.js";
 
 	/**
 	 * @type {any[]}
 	 */
 
-	const menuItems = [
+	let rawMenuItems = $state([
 		{
 			id: '1',
-			name: 'Classic Burger',
-			description: 'Juicy beef patty with fresh lettuce, tomato, and our special sauce',
-			price: 1299,
+			name: { uz: 'Klassik Burger', ru: 'Классический Бургер', en: 'Classic Burger' },
+			description: { uz: 'Yangi pomidor, salat bargi va maxsus sous qo\'shilgan sersuv mol go\'shti', ru: 'Сочная говяжья котлета со свежими листьями салата, помидорами и нашим фирменным соусом', en: 'Juicy beef patty with fresh lettuce, tomato, and our special sauce' },
+			price: 35000,
 			category: 'food',
 			image: '/assets/burger.png'
 		},
 		{
 			id: '2',
-			name: 'Caesar Salad',
-			description: 'Fresh romaine lettuce with parmesan, croutons, and creamy dressing',
-			price: 899,
+			name: { uz: 'Sezar Salati', ru: 'Салат Цезарь', en: 'Caesar Salad' },
+			description: { uz: 'Pishloq, kraker va mayin sous bilan tortiladigan yangi salat barglari', ru: 'Свежие листья салата ромэн с пармезаном, гренками и сливочной заправкой', en: 'Fresh romaine lettuce with parmesan, croutons, and creamy dressing' },
+			price: 25000,
 			category: 'food',
 			image: '/assets/salad.png'
 		},
 		{
 			id: '3',
-			name: 'Margherita Pizza',
-			description: 'Classic pizza with fresh mozzarella, basil, and tomato sauce',
-			price: 1499,
+			name: { uz: 'Margarita Pitsasi', ru: 'Пицца Маргарита', en: 'Margherita Pizza' },
+			description: { uz: 'Yangi motsarella pishlog\'i, rayhon va pomidor sousli klassik pitsa', ru: 'Классическая пицца со свежей моцареллой, базиликом и томатным соусом', en: 'Classic pizza with fresh mozzarella, basil, and tomato sauce' },
+			price: 55000,
 			category: 'food',
 			image: '/assets/pizza.png'
 		},
 		{
 			id: '4',
-			name: 'Iced Latte',
-			description: 'Smooth espresso with cold milk and ice',
-			price: 499,
+			name: { uz: 'Muzli Latte', ru: 'Айс Латте', en: 'Iced Latte' },
+			description: { uz: 'Muz va sovuq sut bilan aralashtirilgan yumshoq espresso', ru: 'Мягкий эспрессо с холодным молоком и льдом', en: 'Smooth espresso with cold milk and ice' },
+			price: 20000,
 			category: 'drinks',
 			image: '/assets/latte.png'
 		},
 		{
 			id: '5',
-			name: 'Fresh Orange Juice',
-			description: 'Freshly squeezed orange juice',
-			price: 399,
+			name: { uz: 'Yangi apelsin sharbati', ru: 'Свежевыжатый апельсиновый сок', en: 'Fresh Orange Juice' },
+			description: { uz: 'Yangi siqilgan apelsin sharbati', ru: 'Свежевыжатый апельсиновый сок', en: 'Freshly squeezed orange juice' },
+			price: 15000,
 			category: 'drinks',
 			image: '/assets/juice.png'
 		},
 		{
 			id: '6',
-			name: 'Chocolate Cake',
-			description: 'Rich chocolate cake with smooth ganache',
-			price: 699,
+			name: { uz: 'Shokoladli tort', ru: 'Шоколадный торт', en: 'Chocolate Cake' },
+			description: { uz: 'Mayin ganajli boy shokoladli tort', ru: 'Богатый шоколадный торт с нежным ганашем', en: 'Rich chocolate cake with smooth ganache' },
+			price: 25000,
 			category: 'desserts',
 			image: '/assets/cake.png'
 		}
-	];
+	]);
+
+	let menuItems = $derived(rawMenuItems.map(item => ({
+		...item,
+		name: (typeof item.name === 'object' && item.name !== null) ? (item.name[$lang] || item.name.uz) : item.name,
+		description: (typeof item.description === 'object' && item.description !== null) ? (item.description[$lang] || item.description.uz) : item.description,
+	})));
 	/**
 	 * @type {any[] | null | undefined}
 	 */
-	const categories = [
-		{ id: 'food', label: 'Food' },
-		{ id: 'drinks', label: 'Drinks' },
-		{ id: 'desserts', label: 'Desserts' }
-	];
+	let categories = $derived([
+		{ id: 'food', label: $t('menu.categories.food') },
+		{ id: 'drinks', label: $t('menu.categories.drinks') },
+		{ id: 'desserts', label: $t('menu.categories.desserts') }
+	]);
 
 	/**
 	 * @type {any[]}
@@ -88,7 +95,7 @@
 		const orderData = {
 			tableNumber: Number(tableNumber),
 			items: cart.map((item) => ({
-				name: item.name,
+				name: (typeof item.name === 'object' && item.name !== null) ? item.name.uz : item.name,
 				quantity: item.quantity
 			})),
 			totalPrice: totalPrice
@@ -96,7 +103,7 @@
 
 		addNewOrder(orderData); // ← markaziy store orqali qo'shildi
 
-		alert(`Stol №${tableNumber} uchun buyurtma qabul qilindi! Oshpaz ko'radi.`);
+		alert(`${tableNumber} ${$t('menu.alert_order')}`);
 		cart = [];
 	}
 
@@ -104,7 +111,7 @@
 	 * @param {any} itemId
 	 */
 	function addToCart(itemId) {
-		const item = menuItems.find((i) => i.id === itemId);
+		const item = rawMenuItems.find((i) => i.id === itemId);
 		if (!item) return;
 
 		const existing = cart.find((i) => i.id === itemId);
@@ -122,9 +129,9 @@
 <div class="min-h-screen bg-background pb-32 transition-colors duration-500">
 	<main class="container mx-auto max-w-7xl px-4 py-10">
 		<div class="mb-10">
-			<h2 class="mb-3 text-4xl font-extrabold tracking-tighter">Choose your flavor</h2>
+			<h2 class="mb-3 text-4xl font-extrabold tracking-tighter">{$t('menu.title')}</h2>
 			<p class="max-w-lg text-lg text-muted-foreground">
-				Premium ingredients, hand-picked for the ultimate dining experience.
+				{$t('menu.subtitle')}
 			</p>
 		</div>
 
