@@ -1,6 +1,8 @@
 <script>
   import Card from "$lib/components/cart/Card.svelte";
   import { Clock, ChefHat, Check } from "lucide-svelte";
+  import { t, lang } from "$lib/i18n.js";
+  import { menuItems } from "$lib/stores/menu.svelte.js";
 
   let { 
     orderId, 
@@ -10,6 +12,14 @@
     status, 
     onStatusChange 
   } = $props();
+
+  // Helper to get translated item name
+  /** @param {string} id */
+  function getItemName(id) {
+    const item = menuItems.find(i => i.id === id);
+    if (!item) return "Unknown";
+    return (typeof item.name === 'object') ? (item.name[$lang] || item.name.uz) : item.name;
+  }
 
   // Vaqtni hisoblash
   // svelte-ignore state_referenced_locally
@@ -34,14 +44,14 @@
         <span class="text-3xl font-black italic text-primary">#{tableNumber}</span>
         <div class="flex items-center gap-2 text-muted-foreground font-medium">
           <Clock class="h-4 w-4 {minutesElapsed > 10 ? 'text-destructive animate-pulse' : ''}" />
-          <span class={minutesElapsed > 10 ? 'text-destructive' : ''}>{minutesElapsed} daqiqa avval</span>
+          <span class={minutesElapsed > 10 ? 'text-destructive' : ''}>{minutesElapsed} {$t("chef.minutes_ago")}</span>
         </div>
       </div>
 
       <ul class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-2">
         {#each items as item}
           <li class="flex items-center justify-between border-b border-border/40 pb-1">
-            <span class="text-lg font-medium">{item.name}</span>
+            <span class="text-lg font-medium">{getItemName(item.itemId)}</span>
             <span class="bg-primary/10 text-primary px-3 py-0.5 rounded-full font-bold">x{item.quantity}</span>
           </li>
         {/each}
@@ -54,14 +64,14 @@
           onclick={() => onStatusChange(orderId, "in_progress")}
           class="flex-1 md:w-40 py-4 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2"
         >
-          <ChefHat class="h-5 w-5" /> BOSHLASH
+          <ChefHat class="h-5 w-5" /> {$t("chef.start")}
         </button>
       {:else}
         <button 
           onclick={() => onStatusChange(orderId, "ready")}
           class="flex-1 md:w-40 py-4 bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2"
         >
-          <Check class="h-5 w-5" /> TAYYOR
+          <Check class="h-5 w-5" /> {$t("chef.ready")}
         </button>
       {/if}
     </div>

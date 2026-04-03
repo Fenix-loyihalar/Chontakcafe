@@ -5,69 +5,16 @@
 	import { Bot } from 'lucide-svelte';
 	import { fade } from 'svelte/transition';
 	import { page } from '$app/state';
-	import { addNewOrder } from '$lib/stores/order.svelte'; // ← yangi import
+	import { addNewOrder } from '$lib/stores/order.svelte.js'; 
+	import { menuItems as rawMenuItems } from '$lib/stores/menu.svelte.js';
 	import { t, lang } from "$lib/i18n.js";
-
-	/**
-	 * @type {any[]}
-	 */
-
-	let rawMenuItems = $state([
-		{
-			id: '1',
-			name: { uz: 'Klassik Burger', ru: 'Классический Бургер', en: 'Classic Burger' },
-			description: { uz: 'Yangi pomidor, salat bargi va maxsus sous qo\'shilgan sersuv mol go\'shti', ru: 'Сочная говяжья котлета со свежими листьями салата, помидорами и нашим фирменным соусом', en: 'Juicy beef patty with fresh lettuce, tomato, and our special sauce' },
-			price: 35000,
-			category: 'food',
-			image: '/assets/burger.png'
-		},
-		{
-			id: '2',
-			name: { uz: 'Sezar Salati', ru: 'Салат Цезарь', en: 'Caesar Salad' },
-			description: { uz: 'Pishloq, kraker va mayin sous bilan tortiladigan yangi salat barglari', ru: 'Свежие листья салата ромэн с пармезаном, гренками и сливочной заправкой', en: 'Fresh romaine lettuce with parmesan, croutons, and creamy dressing' },
-			price: 25000,
-			category: 'food',
-			image: '/assets/salad.png'
-		},
-		{
-			id: '3',
-			name: { uz: 'Margarita Pitsasi', ru: 'Пицца Маргарита', en: 'Margherita Pizza' },
-			description: { uz: 'Yangi motsarella pishlog\'i, rayhon va pomidor sousli klassik pitsa', ru: 'Классическая пицца со свежей моцареллой, базиликом и томатным соусом', en: 'Classic pizza with fresh mozzarella, basil, and tomato sauce' },
-			price: 55000,
-			category: 'food',
-			image: '/assets/pizza.png'
-		},
-		{
-			id: '4',
-			name: { uz: 'Muzli Latte', ru: 'Айс Латте', en: 'Iced Latte' },
-			description: { uz: 'Muz va sovuq sut bilan aralashtirilgan yumshoq espresso', ru: 'Мягкий эспрессо с холодным молоком и льдом', en: 'Smooth espresso with cold milk and ice' },
-			price: 20000,
-			category: 'drinks',
-			image: '/assets/latte.png'
-		},
-		{
-			id: '5',
-			name: { uz: 'Yangi apelsin sharbati', ru: 'Свежевыжатый апельсиновый сок', en: 'Fresh Orange Juice' },
-			description: { uz: 'Yangi siqilgan apelsin sharbati', ru: 'Свежевыжатый апельсиновый сок', en: 'Freshly squeezed orange juice' },
-			price: 15000,
-			category: 'drinks',
-			image: '/assets/juice.png'
-		},
-		{
-			id: '6',
-			name: { uz: 'Shokoladli tort', ru: 'Шоколадный торт', en: 'Chocolate Cake' },
-			description: { uz: 'Mayin ganajli boy shokoladli tort', ru: 'Богатый шоколадный торт с нежным ганашем', en: 'Rich chocolate cake with smooth ganache' },
-			price: 25000,
-			category: 'desserts',
-			image: '/assets/cake.png'
-		}
-	]);
 
 	let menuItems = $derived(rawMenuItems.map(item => ({
 		...item,
 		name: (typeof item.name === 'object' && item.name !== null) ? (item.name[$lang] || item.name.uz) : item.name,
 		description: (typeof item.description === 'object' && item.description !== null) ? (item.description[$lang] || item.description.uz) : item.description,
 	})));
+
 	/**
 	 * @type {any[] | null | undefined}
 	 */
@@ -95,13 +42,13 @@
 		const orderData = {
 			tableNumber: Number(tableNumber),
 			items: cart.map((item) => ({
-				name: (typeof item.name === 'object' && item.name !== null) ? item.name.uz : item.name,
+				itemId: item.id,
 				quantity: item.quantity
 			})),
 			totalPrice: totalPrice
 		};
 
-		addNewOrder(orderData); // ← markaziy store orqali qo'shildi
+		addNewOrder(orderData); 
 
 		alert(`${tableNumber} ${$t('menu.alert_order')}`);
 		cart = [];
@@ -164,7 +111,7 @@
 	<button
 		onclick={() => (isAIAssistantOpen = true)}
 		class="fixed bottom-24 right-4 z-40 bg-primary/90 hover:bg-primary text-primary-foreground p-4 rounded-full shadow-lg transition-transform hover:scale-105 active:scale-95 flex items-center justify-center {isAIAssistantOpen ? 'hidden' : ''}"
-		aria-label="Open AI Assistant"
+		aria-label={$t('ui.open_ai')}
 	>
 		<Bot class="w-6 h-6 animate-pulse" />
 	</button>

@@ -1,11 +1,12 @@
 <script>
-	import { X, Send, Bot, Utensils } from 'lucide-svelte';
+	import { X, Send, Bot, Utensils, Loader2 } from 'lucide-svelte';
 	import { fade, slide } from 'svelte/transition';
-	import { t } from "$lib/i18n.js";
-
+	import { t, lang } from "$lib/i18n.js";
 	let { isOpen = $bindable(false), menuItems = [], onAddCombo } = $props();
 
 	let inputText = $state('');
+	let isLoading = $state(false);
+
 	/**
 	 * @type {{ role: 'user' | 'assistant', text?: string, textKey?: string, budget?: number, combo?: any[], total?: number }[]}
 	 */
@@ -16,60 +17,64 @@
 		}
 	]);
 
-	/** @param {number} budget */
-	function findCombo(budget) {
-		let combo = [];
-		let currentTotal = 0;
-		// Shuffle items to give different recommendations on same budget
-		let shuffled = [...menuItems].sort(() => 0.5 - Math.random());
+	async function handleSend() {
+		if (!inputText.trim() || isLoading) return;
 
-		// Try to pick at least one food, one drink if possible. But simple greedy is fine for now.
-		for (let item of shuffled) {
-			if (currentTotal + item.price <= budget) {
-				combo.push(item);
-				currentTotal += item.price;
-			}
-		}
-		return { combo, total: currentTotal };
-	}
-
-	function handleSend() {
-		if (!inputText.trim()) return;
-
-		const userText = inputText.trim();
-		messages.push({ role: 'user', text: userText });
+		const userMessage = inputText.trim();
+		messages.push({ role: 'user', text: userMessage });
 		inputText = '';
+		isLoading = true;
 
-		// Extract budget from text (first sequence of digits)
-		const match = userText.match(/\d+/);
-		if (match) {
-			const budget = parseInt(match[0], 10);
-			const { combo, total } = findCombo(budget);
+		try {
+			const response = await fetch('/api/chat', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					history: messages.slice(0, -1).map((m) => ({
+						role: m.role,
+						text: m.text || (m.textKey ? $t(m.textKey) : '')
+					})),
+					userMessage: userMessage,
+					language: $lang,
+					menuItems: menuItems
+				})
+			});
 
-			setTimeout(() => {
-				if (combo.length > 0) {
-					messages.push({
-						role: 'assistant',
-						textKey: 'ai_success',
-						budget,
-						combo,
-						total
-					});
-				} else {
-					messages.push({
-						role: 'assistant',
-						textKey: 'ai.error_budget',
-						budget
-					});
-				}
-			}, 600);
-		} else {
-			setTimeout(() => {
-				messages.push({
-					role: 'assistant',
-					textKey: 'ai.no_budget'
+			if (!response.ok) {
+				throw new Error('Failed to fetch from chat API');
+			}
+
+			const parsed = await response.json();
+
+			/** @type {any[]} */
+			let combo = [];
+			let total = 0;
+			if (parsed.suggested_items && Array.isArray(parsed.suggested_items)) {
+				parsed.suggested_items.forEach((/** @type {string} */ id) => {
+					const item = menuItems.find((i) => String(i.id) === String(id));
+					if (item) {
+						combo.push(item);
+						total += item.price;
+					}
 				});
-			}, 600);
+			}
+
+			messages.push({
+				role: 'assistant',
+				text: parsed.message,
+				combo: combo.length > 0 ? combo : undefined,
+				total: total
+			});
+		} catch (e) {
+			console.error('AI Error:', e);
+			messages.push({
+				role: 'assistant',
+				text: $lang === 'uz' ? "Kechirasiz, aloqada xatolik yuz berdi. Qaytadan urinib ko'ramizmi?" : ($lang === 'ru' ? "Извините, произошла ошибка. Попробуем еще раз?" : "Sorry, an error occurred. Shall we try again?")
+			});
+		} finally {
+			isLoading = false;
 		}
 	}
 
@@ -125,7 +130,7 @@
 							{#if msg.textKey === 'ai_success'}
 								{$t('ai.success_budget1')} {(msg.budget || 0).toLocaleString()} {$t('ai.success_budget2')} {(msg.total || 0).toLocaleString()} {$t('cart.currency')})
 							{:else if msg.textKey === 'ai.error_budget'}
-								{msg.budget} {$t('ai.error_budget')}
+								{(msg.budget || 0).toLocaleString()} {$t('ai.error_budget')}
 							{:else if msg.textKey}
 								{$t(msg.textKey)}
 							{:else}
@@ -165,6 +170,15 @@
 				</div>
 			{/each}
 		</div>
+
+		{#if isLoading}
+			<div class="px-4 pb-2" transition:slide>
+				<div class="flex items-center gap-2 text-muted-foreground text-sm">
+					<Loader2 class="w-4 h-4 animate-spin" />
+					{$lang === 'uz' ? 'Yozmoqda...' : $lang === 'ru' ? 'Печатает...' : 'Typing...'}
+				</div>
+			</div>
+		{/if}
 
 		<!-- Input Area -->
 		<div class="p-3 border-t border-border bg-background flex gap-2">

@@ -4,6 +4,7 @@
   import ChefOrderItem from "$lib/components/cart/ChefOrderItem.svelte";
   import { fade, slide } from "svelte/transition";
 	import { orders, updateOrderStatus } from "$lib/stores/order.svelte";
+  import { t } from "$lib/i18n.js";
 
   let activeOrders = $derived(orders.filter(o => o.status !== "ready"));
 
@@ -24,16 +25,16 @@
         <ChefHat size={32} />
       </div>
       <div>
-        <h1 class="text-4xl font-black tracking-tighter uppercase">Oshxona displayi</h1>
+        <h1 class="text-4xl font-black tracking-tighter uppercase">{$t("waiter.title")}</h1>
         {#if activeOrders.length != 0}
-        <p class="text-muted-foreground font-medium">{activeOrders.length} ta aktiv buyurtma bilan ishlanmoqda</p>
+        <p class="text-muted-foreground font-medium">{activeOrders.length} {$t("waiter.active_orders")}</p>
         {/if}
       </div>
     </div>
 
     <div class="flex items-center gap-2 bg-muted/50 p-2 rounded-xl border">
       <Timer class="h-4 w-4 text-muted-foreground" />
-      <span class="text-sm font-bold font-mono">LIVE FEED</span>
+      <span class="text-sm font-bold font-mono">{$t("chef.live_feed")}</span>
       <div class="h-2 w-2 bg-green-500 rounded-full animate-ping"></div>
     </div>
   </div>
@@ -44,9 +45,9 @@
       class="flex flex-col items-center justify-center py-32 text-center border-4 border-dashed rounded-4xl border-muted"
     >
       <ChefHat class="h-20 w-20 text-muted mb-6" />
-      <h2 class="text-3xl font-bold text-muted-foreground tracking-tight">All clear, Chef!</h2>
+      <h2 class="text-3xl font-bold text-muted-foreground tracking-tight">{$t("chef.empty_desc")}</h2>
       <p class="text-muted-foreground mt-2 max-w-xs mx-auto">
-        O'tiring va dam oling, yangi buyurtmalar shu yerda paydo boladi!
+        {$t("chef.no_orders")}
       </p>
     </div>
   {:else}

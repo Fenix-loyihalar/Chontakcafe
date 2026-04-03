@@ -40,6 +40,45 @@ const dictionary = {
       total: "Jami",
       add_all: "Barchasini savatga",
       added: "Zo'r! Men bularni savatingizga qo'shdim."
+    },
+    chef: {
+      title: "Buyurtmalar paneli",
+      live_feed: "Oshxona jonli oqimi",
+      no_orders: "Hozircha hechnarsa yo'q",
+      empty_desc: "Hammasi nazorat ostida, oshpaz!",
+      start: "BOSHLASH",
+      ready: "TAYYOR",
+      minutes_ago: "daqiqa avval"
+    },
+    waiter: {
+      title: "Xizmat ko'rsatish paneli",
+      active_orders: "faol buyurtma mavjud",
+      served: "Xizmat ko'rsatildi",
+      total: "Jami",
+      table: "Stol",
+      mark_ready: "Tayyor deb belgilash",
+      mark_preparing: "Tayyorlanmoqda deb belgilash"
+    },
+    status: {
+      all: "Barchasi",
+      pending: "Kutilmoqda",
+      in_progress: "Tayyorlanmoqda",
+      ready: "Tayyor"
+    },
+    footer: {
+      desc: "Toshkentning eng mazali choy va taomlari, tez va qulay buyurtma",
+      links: "Tez havolalar",
+      history: "Buyurtmalar tarixi",
+      contact: "Aloqa",
+      location: "Toshkent, Yunusobod",
+      rights: "Barcha huquqlar himoyalangan"
+    },
+    theme: {
+      aria: "Mavzuni o'zgartirish"
+    },
+    ui: {
+      open_ai: "AI yordamchini ochish",
+      stol: "Stol"
     }
   },
   ru: {
@@ -78,6 +117,45 @@ const dictionary = {
       total: "Итого",
       add_all: "Добавить все в корзину",
       added: "Отлично! Я добавил это в вашу корзину."
+    },
+    chef: {
+      title: "Панель заказов",
+      live_feed: "Живая лента кухни",
+      no_orders: "Заказов пока нет",
+      empty_desc: "Все чисто, шеф!",
+      start: "НАЧАТЬ",
+      ready: "ГОТОВО",
+      minutes_ago: "мин. назад"
+    },
+    waiter: {
+      title: "Панель обслуживания",
+      active_orders: "активных заказов в работе",
+      served: "Обслужено",
+      total: "Итого",
+      table: "Стол",
+      mark_ready: "Отметить как готово",
+      mark_preparing: "Начать готовить"
+    },
+    status: {
+      all: "Все",
+      pending: "В ожидании",
+      in_progress: "Готовится",
+      ready: "Готово"
+    },
+    footer: {
+      desc: "Самый вкусный чай и еда Ташкента, быстрый и удобный заказ",
+      links: "Быстрые ссылки",
+      history: "История заказов",
+      contact: "Контакты",
+      location: "Ташкент, Юнусабад",
+      rights: "Все права защищены"
+    },
+    theme: {
+      aria: "Сменить тему"
+    },
+    ui: {
+      open_ai: "Открыть ИИ помощника",
+      stol: "Стол"
     }
   },
   en: {
@@ -116,6 +194,45 @@ const dictionary = {
       total: "Total",
       add_all: "Add all to Cart",
       added: "Awesome! I added those to your cart."
+    },
+    chef: {
+      title: "Order Dashboard",
+      live_feed: "Live Kitchen Feed",
+      no_orders: "No orders found",
+      empty_desc: "All clear, Chef!",
+      start: "START",
+      ready: "READY",
+      minutes_ago: "mins ago"
+    },
+    waiter: {
+      title: "Service Dashboard",
+      active_orders: "active orders in progress",
+      served: "Served",
+      total: "Total",
+      table: "Table",
+      mark_ready: "Mark as Ready",
+      mark_preparing: "Start Preparing"
+    },
+    status: {
+      all: "All",
+      pending: "Pending",
+      in_progress: "Preparing",
+      ready: "Ready"
+    },
+    footer: {
+      desc: "Tashkent's tastiest tea and food, quick and convenient ordering",
+      links: "Quick Links",
+      history: "Order History",
+      contact: "Contact",
+      location: "Tashkent, Yunusobod",
+      rights: "All rights reserved"
+    },
+    theme: {
+      aria: "Toggle theme"
+    },
+    ui: {
+      open_ai: "Open AI Assistant",
+      stol: "Table"
     }
   }
 };
