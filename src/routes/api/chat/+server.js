@@ -2,7 +2,7 @@ import { json } from '@sveltejs/kit';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
 // New API key provided by the user
-const API_KEY = "AIzaSyDst8tJf0xkQk0IekdLmjQvIXk7UvkwxS4";
+const API_KEY = "AIzaSyDKn-H5lSlkxNYGeMHeiqMtR0z7I5TFQNw";
 
 export async function POST({ request }) {
     const body = await request.json();

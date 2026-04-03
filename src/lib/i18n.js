@@ -21,6 +21,7 @@ const dictionary = {
       subtitle: "Siz uchun maxsus lazzat va sifatli masalliqlar.",
       categories: { food: "Taomlar", drinks: "Ichimliklar", desserts: "Shirinliklar" },
       alert_order: "uchun buyurtma qabul qilindi!",
+      ai_placeholder: "Masalan: Menda 100 000 so'm bor..."
     },
     cart: {
       total: "Umumiy hisob",
@@ -98,6 +99,7 @@ const dictionary = {
       subtitle: "Премиальные ингредиенты, специально для вас.",
       categories: { food: "Еда", drinks: "Напитки", desserts: "Десерты" },
       alert_order: "Заказ принят для",
+      ai_placeholder: "Например: У меня есть 100 000 сум..."
     },
     cart: {
       total: "Итого",
@@ -175,6 +177,8 @@ const dictionary = {
       subtitle: "Premium ingredients, hand-picked for the ultimate dining experience.",
       categories: { food: "Food", drinks: "Drinks", desserts: "Desserts" },
       alert_order: "Order placed for table",
+      ai_placeholder: "E.g. I have 100 000 so'm..."
+
     },
     cart: {
       total: "Total",
