@@ -34,7 +34,7 @@
         </Card>
       </a>
 
-      <a href="/girgitton" class="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 rounded-xl">
+      <a href="/ofisiant" class="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 rounded-xl">
         <Card 
           class="p-8 text-center space-y-4 hover:-translate-y-1 hover:shadow-lg transition-all duration-300 cursor-pointer h-full" 
           dataTestid="card-waiter"

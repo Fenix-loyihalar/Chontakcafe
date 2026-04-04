@@ -2,7 +2,7 @@
     import MenuItemCard from '$lib/components/cart/MenuItemCard.svelte';
     import CartBar from '$lib/components/cart/CartBar.svelte';
     import AIAssistant from '$lib/components/cart/AIAssistant.svelte';
-    import { Sparkles } from 'lucide-svelte'; // AI uchun chiroyliroq icon
+    import { CheckCircle2, ChefHat, Clock, Sparkles } from 'lucide-svelte'; // AI uchun chiroyliroq icon
     import { fade } from 'svelte/transition';
     import { page } from '$app/state';
     import { addNewOrder } from '$lib/stores/order.svelte'; 
@@ -56,8 +56,10 @@
     let activeCategory = $state('food');
     let tableNumber = $derived(page.url.searchParams.get('table') || 'N/A');
     let isAIAssistantOpen = $state(false);
+    
+    // YENGI STATE: Muvaffaqiyatli buyurtmani saqlash uchun
+    let activeSuccessOrder = $state(null); 
 
-    // @ts-ignore
     let filteredItems = $derived(menuItems.filter((item) => item.category === activeCategory));
     let itemCount = $derived(cart.reduce((sum, item) => sum + item.quantity, 0));
     let totalPrice = $derived(cart.reduce((sum, item) => sum + item.price * item.quantity, 0));
@@ -68,6 +70,7 @@
         const orderData = {
             tableNumber: Number(tableNumber),
             items: cart.map((item) => ({
+                itemId: item.id, // itemId qo'shildi
                 name: (typeof item.name === 'object' && item.name !== null) ? item.name.uz : item.name,
                 quantity: item.quantity
             })),
@@ -76,7 +79,18 @@
 
         addNewOrder(orderData);
 
-        alert(`${tableNumber} ${$t('menu.alert_order') || 'buyurtma yuborildi'}`);
+        // ETA (Tahminiy vaqt) hisoblash logikasi...
+        const estimatedMinutes = Math.min(10 + (itemCount * 2), 45);
+
+        activeSuccessOrder = {
+            table: tableNumber,
+            eta: estimatedMinutes
+        };
+
+        cart = [];
+    }
+
+    function clearCart() {
         cart = [];
     }
 
@@ -152,9 +166,57 @@
         </div>
     </main>
 
-    <CartBar {itemCount} {totalPrice} onPlaceOrder={handlePlaceOrder} />
+    <CartBar {itemCount} {totalPrice} onPlaceOrder={handlePlaceOrder} onClearCart={clearCart} />
 
     <AIAssistant bind:isOpen={isAIAssistantOpen} {menuItems} onAddCombo={addMultipleToCart} />
+
+    {#if activeSuccessOrder}
+        <div 
+            class="fixed inset-0 z-[100] flex items-center justify-center bg-background/80 p-4 backdrop-blur-md" 
+            transition:fade={{ duration: 300 }}
+        >
+            <div
+                class="relative w-full max-w-md overflow-hidden rounded-[2.5rem] border border-border/50 bg-card p-8 text-center text-card-foreground shadow-2xl shadow-primary/10"
+                in:scale={{ start: 0.9, duration: 400, delay: 100 }}
+            >
+                <div class="pointer-events-none absolute -right-24 -top-24 h-48 w-48 rounded-full bg-green-500/10 blur-3xl"></div>
+                <div class="pointer-events-none absolute -bottom-24 -left-24 h-48 w-48 rounded-full bg-primary/10 blur-3xl"></div>
+
+                <div class="relative z-10 flex flex-col items-center">
+                    
+                    <div class="mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-tr from-green-500/20 to-emerald-500/20 text-emerald-500 ring-8 ring-emerald-500/10">
+                        <CheckCircle2 class="h-12 w-12" />
+                    </div>
+
+                    <h3 class="mb-2 text-3xl font-black tracking-tight">
+                        {$lang === 'uz' ? 'Buyurtma qabul qilindi!' : 'Order Placed!'}
+                    </h3>
+                    <p class="mb-8 text-muted-foreground">
+                        {$lang === 'uz' ? `Stol #${activeSuccessOrder.table} uchun buyurtmangiz oshxonaga yuborildi.` : `Your order for Table #${activeSuccessOrder.table} has been sent to the kitchen.`}
+                    </p>
+
+                    <div class="mb-8 w-full rounded-3xl border border-border/50 bg-muted/50 p-6">
+                        <div class="mb-2 flex items-center justify-center gap-3 text-primary">
+                            <Clock class="h-8 w-8 animate-pulse" />
+                            <span class="text-5xl font-black">{activeSuccessOrder.eta}</span>
+                            <span class="mt-3 text-xl font-bold">{$lang === 'uz' ? 'daq.' : 'min.'}</span>
+                        </div>
+                        <p class="flex items-center justify-center gap-2 text-sm font-bold uppercase tracking-widest text-muted-foreground">
+                            <ChefHat class="h-4 w-4" /> 
+                            {$lang === 'uz' ? "Tahminiy tayyor bo'lish vaqti" : "Estimated Prep Time"}
+                        </p>
+                    </div>
+
+                    <button
+                        onclick={() => activeSuccessOrder = null}
+                        class="w-full rounded-2xl bg-primary py-4 text-lg font-bold text-primary-foreground shadow-lg shadow-primary/20 transition-all hover:scale-[1.02] hover:bg-primary/90 active:scale-95"
+                    >
+                        {$lang === 'uz' ? 'Menyuga qaytish' : 'Back to Menu'}
+                    </button>
+                </div>
+            </div>
+        </div>
+    {/if}
 </div>
 
 <style>

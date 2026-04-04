@@ -1,95 +1,80 @@
 <script lang="ts">
   import Card from "$lib/components/cart/Card.svelte";
   import Badge from "$lib/components/cart/Badge.svelte";
-  import { Clock, CupSodaIcon } from "lucide-svelte";
+  import { Clock, CheckCircle2, Navigation } from "lucide-svelte"; // Yaxshiroq iconlar
   import { t, lang } from "$lib/i18n.js";
-  import { menuItems } from "$lib/stores/menu.svelte.js";
 
   let { 
     order, 
-    onStatusChange, 
     onServed 
   } = $props();
 
-  // Helper to get translated item name
-  /** @param {string} id */
-  function getItemName(id) {
-    const item = menuItems.find(i => i.id === id);
-    if (!item) return "Unknown";
-    return (typeof item.name === 'object') ? (item.name[$lang] || item.name.uz) : item.name;
-  }
-
-  type OrderStatus = "pending" | "in_progress" | "ready";
-  type StatusConfig = Record<OrderStatus, { color: string }>;
-
-  // Status ranglarini aniqlash
-  const statusConfig: StatusConfig = {
-    pending: { color: "bg-orange-500/10 text-orange-500 border-orange-500/20" },
-    in_progress: { color: "bg-blue-500/10 text-blue-500 border-blue-500/20" },
-    ready: { color: "bg-green-500/10 text-green-500 border-green-500/20" }
-  };
-
-  // Helper to get a valid status
-  function getCurrentStatus(order: { status: string; }): OrderStatus {
-    if (!order || !order.status) return 'pending';
-    if (['pending', 'in_progress', 'ready'].includes(order.status)) {
-      return order.status as OrderStatus;
+  // Ovqat nomini tarjima qilish (Oshpaz panelidagi bilan bir xil)
+  function renderItemName(item: any) {
+    if (typeof item.name === 'string') return item.name;
+    if (typeof item.name === 'object' && item.name !== null) {
+      return item.name[$lang] || item.name.uz || item.name.en || "Unknown";
     }
-    return 'pending';
+    return "Unknown";
   }
 
-  // Vaqtni formatlash (necha daqiqa oldin)
-  /**
-	 * @param {number} date
-	 */
-  function getMinutesAgo(date: number) {
-    return Math.floor((new Date().getTime() - new Date(date).getTime()) / 60000);
-  }
+  // Vaqtni hisoblash (Reaktiv)
+  let now = $state(new Date().getTime());
+  const interval = setInterval(() => { now = new Date().getTime(); }, 60000);
+  $effect(() => () => clearInterval(interval));
+
+  let minutesAgo = $derived(Math.floor((now - new Date(order.createdAt).getTime()) / 60000));
+  
+  // Faqat 'ready' bo'lsa yashil fon beramiz
+  const isReady = $derived(order.status === 'ready');
 </script>
 
-<Card class="overflow-hidden border-t-4 {order.status === 'ready' ? 'border-t-green-500' : 'border-t-primary/20'}">
+<Card class="overflow-hidden border-t-4 transition-all {isReady ? 'border-t-green-500 bg-green-50/30 dark:bg-green-900/10 shadow-lg' : 'border-t-blue-400 opacity-80'}">
   <div class="p-5">
     <div class="flex justify-between items-start mb-4">
       <div>
-        <h3 class="text-xl font-bold">#{order.tableNumber}-{$t("waiter.table")}</h3>
-        <p class="text-xs text-muted-foreground flex items-center gap-1 mt-1">
-          <Clock class="h-3 w-3" /> {getMinutesAgo(order.createdAt)} {$t("chef.minutes_ago")}
+        <div class="flex items-center gap-2">
+           <h3 class="text-2xl font-black tracking-tighter">#{order.tableNumber}</h3>
+           <span class="text-xs font-bold uppercase text-muted-foreground">{$t("waiter.table")}</span>
+        </div>
+        <p class="text-[10px] text-muted-foreground flex items-center gap-1 mt-1 font-medium uppercase tracking-wider">
+          <Clock class="h-3 w-3" /> {minutesAgo} {$t("chef.minutes_ago")}
         </p>
       </div>
-      <Badge class={statusConfig[getCurrentStatus(order)].color}>
-        {$t("status." + getCurrentStatus(order))}
+
+      <Badge class="{isReady ? 'bg-green-500 text-white' : 'bg-blue-100 text-blue-600'} border-none px-3 py-1 rounded-full text-[10px] font-bold">
+        {isReady ? $t("status.ready") : $t("status.in_progress")}
       </Badge>
     </div>
 
-    <div class="space-y-3 mb-6">
+    <div class="space-y-2 mb-6 bg-white/50 dark:bg-black/20 rounded-xl p-3 border border-dashed">
       {#each order.items as item}
-        <div class="flex justify-between text-sm border-b border-dashed pb-1 italic">
-          <span>{getItemName(item.itemId)}</span>
-          <span class="font-bold text-primary">x{item.quantity}</span>
+        <div class="flex justify-between text-sm items-center">
+          <span class="font-medium text-zinc-700 dark:text-zinc-300">{renderItemName(item)}</span>
+          <span class="font-bold text-primary bg-primary/5 px-2 py-0.5 rounded-md text-xs">x{item.quantity}</span>
         </div>
       {/each}
     </div>
 
-    <div class="flex justify-between items-center mb-4">
-      <span class="text-xs text-muted-foreground uppercase tracking-widest font-semibold">{$t("waiter.total")}</span>
-      <span class="text-lg font-black">{order.totalPrice.toLocaleString()} {$t('cart.currency')}</span>
+    <div class="flex justify-between items-center mb-5 px-1">
+      <span class="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">{$t("waiter.total")}</span>
+      <span class="text-xl font-black text-zinc-900 dark:text-zinc-100">{order.totalPrice.toLocaleString()} <small class="text-[10px] font-normal">{$t('cart.currency')}</small></span>
     </div>
 
-    <div class="grid grid-cols-2 gap-2">
-      {#if order.status !== 'ready'}
-        <button 
-          onclick={() => onStatusChange(order.id, order.status === 'pending' ? 'in_progress' : 'ready')}
-          class="col-span-2 py-2 rounded-lg bg-secondary text-secondary-foreground font-bold hover:bg-secondary/80 transition-all text-sm"
-        >
-          {order.status === 'pending' ? $t("waiter.mark_preparing") : $t("waiter.mark_ready")}
-        </button>
-      {:else}
+    <div class="w-full">
+      {#if isReady}
         <button 
           onclick={() => onServed(order.id)}
-          class="col-span-2 py-2 rounded-lg bg-green-600 text-white font-bold hover:bg-green-700 transition-all flex items-center justify-center gap-2"
+          class="w-full py-4 rounded-2xl bg-green-600 hover:bg-green-700 text-white font-black transition-all flex items-center justify-center gap-2 shadow-lg shadow-green-600/20 active:scale-95"
         >
-          <CupSodaIcon class="h-4 w-4" /> {$t("waiter.served")}
+          <CheckCircle2 class="h-5 w-5" /> 
+          {$t("waiter.served").toUpperCase()}
         </button>
+      {:else}
+        <div class="w-full py-3 rounded-2xl bg-zinc-100 dark:bg-zinc-800 text-zinc-400 text-center text-xs font-bold flex items-center justify-center gap-2 border border-zinc-200 dark:border-zinc-700">
+          <Navigation class="h-4 w-4 animate-pulse" /> 
+          {$t("status.in_progress").toUpperCase()}...
+        </div>
       {/if}
     </div>
   </div>

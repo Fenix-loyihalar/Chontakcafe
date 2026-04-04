@@ -1,6 +1,5 @@
 <script>
   import { ChefHat, Timer } from "lucide-svelte";
-  import Badge from "$lib/components/cart/Badge.svelte";
   import ChefOrderItem from "$lib/components/cart/ChefOrderItem.svelte";
   import { fade, slide } from "svelte/transition";
 	import { orders, updateOrderStatus } from "$lib/stores/order.svelte";

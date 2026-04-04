@@ -11,7 +11,7 @@ const dictionary = {
       subtitle: "Davom etish uchun rolingizni tanlang!",
       customer: "Mijoz",
       customer_desc: "Menyuni ko'rish va buyurtma qilish",
-      waiter: "Girgitton",
+      waiter: "Ofisiant",
       waiter_desc: "Buyurtmalarni olib borish",
       chef: "Oshpaz",
       chef_desc: "Buyurtmalarni ko'rish va tayyorlash"
